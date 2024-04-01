@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { List } from "./list";
+import { Filter } from "./filter";
 
- 
 export function App() {
+  const [originalList, setOriginalList] = useState([]);
   const [robotsList, setRobotsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
@@ -16,6 +17,7 @@ export function App() {
         // console.table(data);
         // console.log(`${data.length} items loaded`);
         setRobotsList(data);
+        setOriginalList(data);
       } catch (error) {
         setErrorMsg(`fetch operation failed: ${error.message}`);
       } finally {
@@ -35,7 +37,10 @@ export function App() {
       ) : isLoading ? (
         <h1 className="load-label">Loading...</h1>
       ) : (
-        <List listData={robotsList} />
+        <>
+          <Filter listData={originalList} onFilter={setRobotsList} />
+          <List listData={robotsList} />
+        </>
       )}
     </div>
   );
